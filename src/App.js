@@ -1,47 +1,69 @@
 import './App.css';
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 
 function App() {
 
+  const STARTING_TIME = 3
+
   const [text, setText] = useState("")
-  const [timeRemaining, setTimeRemaining] = useState(3)
+  const [timeRemaining, setTimeRemaining] = useState(STARTING_TIME)
+  const [startGame, setStartGame] = useState(false)
+  const [wordCount, setWordCount] = useState(0)
+
+  const textareaRef = useRef(null)
+
+
 
   useEffect(() => {
-    const interval = setInterval(() => {
 
-      setTimeRemaining(prevState => {
-        if (prevState !== 0) {
-          setTimeRemaining(prevState - 1)
-        } else {
-          setTimeRemaining(0)
-        }
-      })
+    if (timeRemaining > 0 && startGame) {
+      setTimeout(() => {
+        calculateWordCount(text)
+        setTimeRemaining(prevTime => prevTime - 1)
+      }, 1000)
+    } else if (timeRemaining === 0) {
+      endGame()
+    }
+  }, [timeRemaining, startGame])
 
-    }, 1000)
-    return () => clearInterval(interval);
-
-  }, []);
 
   const handleChange = (e) => {
     const { value } = e.target
     setText(value)
   }
 
+  const playGame = () => {
+    setStartGame(true)
+    setWordCount(0)
+    setTimeRemaining(STARTING_TIME)
+    setText("")
+    textareaRef.current.disabled = false
+    textareaRef.current?.focus()
+  }
+
+  const endGame = () => {
+    setStartGame(false)
+    calculateWordCount(text)
+  }
+
   const calculateWordCount = (text) => {
+    console.log(text)
     const wordsArr = text.trim().split(" ")
     const filteredWords = wordsArr.filter(word => word !== "")
-    return filteredWords.length
+    return setWordCount(filteredWords.length)
   }
 
   return (
     <div>
       <h1>Title</h1>
       <textarea
+        ref={textareaRef}
+        disabled={!startGame}
         onChange={handleChange}
         value={text} />
       <h4>Time remaining: {timeRemaining} </h4>
-      <button onClick={() => calculateWordCount(text)}>Start</button>
-      <h1>Word count:</h1>
+      <button disabled={startGame} onClick={playGame}>Start</button>
+      <h1>Word count:{wordCount}</h1>
     </div>
 
   )
