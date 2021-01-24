@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react"
 
 function App() {
 
-  const STARTING_TIME = 3
+  const STARTING_TIME = 60
 
   const [text, setText] = useState("")
   const [timeRemaining, setTimeRemaining] = useState(STARTING_TIME)
