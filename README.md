@@ -2,7 +2,7 @@
 
 > A website on which can check how many words you can type in 1 minute.
 >
-> 👉 [Live demo](https://stefi.codes/speed-typing-game/)
+> 👉 [Live demo](https://stefi.xyz/speed-typing-game/)
 
 ![Speed Typing Screenshot](./src/images/speed-tying.png)
 
